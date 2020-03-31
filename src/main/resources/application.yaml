@@ -1,0 +1,43 @@
+test-app:
+  kafka-host: localhost:9092
+  message-topic: test-topic
+  process-state-topic: test-topic-state
+  dead-letter-topic: test-topic-dead-letter
+
+  message-receiver-options:
+    '[bootstrap.servers]': ${test-app.kafka-host}
+    '[application.id]': test-app
+    '[cache.max.bytes.buffering]': 0
+    '[group.id]': test-app-1
+    '[key.deserializer]': org.apache.kafka.common.serialization.StringDeserializer
+    '[value.deserializer]': org.apache.kafka.common.serialization.StringDeserializer
+    '[auto.offset.reset]': earliest
+    '[enable.auto.commit]': true
+    '[client.id]': local-1-receiver
+    '[max.poll.records]': 10
+    '[max.poll.interval.ms]': 60000
+    '[session-timeout-ms]': 30000
+
+  message-sender-options:
+    '[bootstrap.servers]': ${test-app.kafka-host}
+    '[key.serializer]': org.apache.kafka.common.serialization.StringSerializer
+    '[value.serializer]': org.apache.kafka.common.serialization.StringSerializer
+    '[client.id]': local-1-sender
+    '[acks]': all
+
+  process-state-receiver-options:
+    '[bootstrap.servers]': ${test-app.kafka-host}
+    '[application.id]': test-app
+    '[cache.max.bytes.buffering]': 10485760
+    '[default.key.serde]': org.apache.kafka.common.serialization.Serdes$StringSerde
+    '[default.value.serde]': com.nexmo.spring.kafka.failover.ProcessStateSerde
+    '[auto.offset.reset]': earliest
+    '[enable.auto.commit]': true
+    '[client.id]': local-1-state-receiver
+
+  process-state-sender-options:
+    '[bootstrap.servers]': ${test-app.kafka-host}
+    '[key.serializer]': org.apache.kafka.common.serialization.StringSerializer
+    '[value.serializer]': com.nexmo.spring.kafka.failover.ProcessStateSerde
+    '[acks]': all
+    '[client.id]': local-1-state-sender
