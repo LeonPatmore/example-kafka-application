@@ -14,7 +14,7 @@ public class ExampleProcessor implements Processor<ExampleDomain, ExampleContext
 
     @Override
     public Mono<ExampleContext> process(ExampleContext exampleContext) {
-        return Mono.delay(Duration.ofSeconds(1)).thenReturn(exampleContext);
+        return Mono.delay(Duration.ofSeconds(40)).thenReturn(exampleContext);
     }
 
     @Override
